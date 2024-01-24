@@ -1,5 +1,6 @@
 const http = require('http');
 const members = require('./members');
+const user = require('./user'); // Perbaiki nama variabel menjadi user
 
 const server = http.createServer((req, res) => {
   const path = req.url;
@@ -8,7 +9,8 @@ const server = http.createServer((req, res) => {
     res.setHeader('Content-Type', 'text/plain');
     res.write('This is the home page');
     res.end();
-  }else if (path === '/about') {
+
+  } else if (path === '/about') {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/json');
     const response = {
@@ -18,18 +20,20 @@ const server = http.createServer((req, res) => {
       date: new Date().toISOString(), 
       data: members 
     };
-    // Mengubah objek JSON menjadi string dan menulisnya ke respons
     res.write(JSON.stringify(response));
     res.end();
-}});
-server.listen(3000)
-// , () => {
-//   console.log('Server berjalan di: http://localhost:3000/');
-// });
 
+  } else if (path === "/user") {
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'application/json');
+    const response = {
+      data: user 
+    };
+    res.write(JSON.stringify(response));
+    res.end();
+  }
+});
 
-
-
-
-
-  
+server.listen(3000, () => {
+  console.log('Server berjalan di: http://localhost:3000/');
+});

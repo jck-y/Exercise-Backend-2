@@ -1,0 +1,19 @@
+{
+	"info": {
+		"_postman_id": "20c379af-c886-4e6a-ac6b-73d20ecca143",
+		"name": "ClassBackend",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "32480103"
+	},
+	"item": [
+		{
+			"name": "user.js",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "https://jsonplaceholder.typicode.com/users"
+			},
+			"response": []
+		}
+	]
+}

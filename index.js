@@ -1,6 +1,6 @@
 const http = require('http');
 const members = require('./members');
-const user = require('./user'); // Perbaiki nama variabel menjadi user
+const user = require('./user'); 
 const moment = require('moment');
 
 const server = http.createServer((req, res) => {
@@ -17,14 +17,13 @@ const server = http.createServer((req, res) => {
       status: 'success',
       message: 'response success',
       description: 'Exercise #03',
-      // Tambahkan baris ini untuk menetapkan properti date
       date: moment().format(),
       // data: members 
       
     };
     res.write(JSON.stringify(response));
     res.end();
-  } // Tambahkan kurung kurawal ini untuk menutup blok else if
+  } 
   else if (path === "/user") {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/json');

@@ -9,60 +9,62 @@ const port = 3000
 // })
 
 app.use(morgan("dev"))
-app.get('/contoh', (req, res)=> 
+app.get('/', (req, res)=> 
     res.json({
         status: "success",
         message: "get"
     })
 );
 
-app.post('/contoh', (req, res)=> 
+app.get('/about', (req, res)=> 
     res.json({
         status: "success",
-        message: "hello world post"
+        message: "hello world about"
     })
 );
+
+app.get('/user', (req, res)=>
+    res.json({
+        status:"success",
+        message: "hello user"
+    })
+);
+
 // app.post('/contoh', (req, res)=> {
 //     res.send('request dengan method POST')
 // })
-app.put('/contoh', (req, res)=>
-    res.json({
-        status:"success",
-        message: "put"
-    })
-);
 
-app.delete('/contoh', (req, res)=> 
-    res.json({
-        status:"success",
-        message: "delete"
-    })
-);
+// app.delete('/contoh', (req, res)=> 
+//     res.json({
+//         status:"success",
+//         message: "delete"
+//     })
+// );
 
-app.patch('/contoh', (req, res)=> 
-    res.json({
-        status:"success",
-        message: "patch"
-    })
-);
-//parrams
-app.get("/post/:id", (req,res)=>{
-    const id = req.params.id;
-    res.json({
-        status:"success",
-        message: `Artikel ID ke-${id}`
-    })
-})
+// app.patch('/contoh', (req, res)=> 
+//     res.json({
+//         status:"success",
+//         message: "patch"
+//     })
+// );
+// //parrams
+// app.get("/post/:id", (req,res)=>{
+//     const id = req.params.id;
+//     res.json({
+//         status:"success",
+//         message: `Artikel ID ke-${id}`
+//     })
+// })
 
-app.get("/post", (req,res)=>{
-    // const data = req.query
-    const {page, sort}= req.query
-    res.json({
-        status:"success",
-        // message:data.page
-        message: `Page = ${page}, Sort by = ${sort}`
-    })
-})
+// app.get("/post", (req,res)=>{
+//     // const data = req.query
+//     const {page, sort}= req.query
+//     res.json({
+//         status:"success",
+//         // message:data.page
+//         message: `Page = ${page}, Sort by = ${sort}`
+//     })
+// })
 
 
 app.listen(port, ()=>console.log(`Server running at http://localhost:${port}`));

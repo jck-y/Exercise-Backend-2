@@ -1,20 +1,17 @@
 const users = [
     {
       id: 1,
-      username: 'John',
-      password: '123',
+      name: 'John',
     },
     {
         id: 2,
-        username: 'Smith',
-      password: '1233',
+        name: 'Smith',
     },
     {
         id: 3,
-        username: 'Bob',
-      password: '1123',
+        name: 'Bob',
     },
   ];
   
-  module.exports = users;
+ module.exports = users;
   

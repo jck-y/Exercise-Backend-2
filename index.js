@@ -1,40 +1,120 @@
-const express = require('express');
-const morgan = require('morgan');
-const users = require('./users'); 
+const express = require("express");
+const multer = require("multer");
+const morgan = require("morgan");
+const cors = require("cors")
+const users = require("./users");
 const app = express();
 const port = 3000;
-const bodyParser = require('body-parser')
-const path = require("path");
-const multer = require("multer");
-const upload = multer ({dest: "public"})
-const fs = require("fs")
-const cors = require ('cors')
 
-app.use(morgan('dev'));
-//1. bodyparser
-app.use(bodyParser.urlencoded({extended:true}))
-app.use(bodyParser.json())
-//1.1 pakai express
-app.use(express.urlencoded({extended:true}))
-app.use(express.json())
-//4. CORS
-app.use(cors());
-app.post('/login',(req,res)=>{
-    const {username, password} = req.body
-    res.send(`anda login dengan ${username} dan ${password}`)
-})
-//2. Statis FIle
-app.use(express.static(path.join(__dirname, "public")))
-//3. File Upload
-app.post("/upload", upload.single("file"), (req, res)=>{
-    const file = req.file;
-    if(file){
-        const target = path.join(__dirname, "public", file.originalname)
-        fs.renameSync(file.path, target)
-        res.send("file berhasil diupload")
-    } else {
-        res.send("file gagal diupload")
+app.use(express.static('public'));
+app.use(express.json());
+app.use(morgan("dev"));
+app.use(cors({
+    origin: "http://127.0.0.1:5500",
+}));
+const upload = multer({ dest: "public/" });
+
+//1
+app.get("/users", (req, res) => {
+  res.json({
+    status: "success",
+    data: users,
+  });
+});
+//3
+app.post("/users", (req, res) => {
+  if (!req.body) {
+    return res.status(400).json({
+      status: "error",
+      message: "Masukkan data yang akan diubah",
+    });
+  }
+  const newUser = req.body;
+  users.push(newUser);
+  res.status(201).json({
+    status: "success",
+    message: "Record baru berhasil ditambahkan",
+    data: newUser,
+  });
+});
+//4
+app.post("/upload", upload.single("image"), (req, res) => {
+  res.status(200).json({
+    status: "success",
+    message: "File berhasil diunggah",
+  });
+});
+//2
+app.get("/users/:name", (req, res) => {
+  const requestedName = req.params.name.toLowerCase();
+  const user = users.find((u) => u.name.toLowerCase() === requestedName);
+  if (!user) {
+    res.status(404).json({
+      status: "error",
+      message: "Data tidak ditemukan",
+    });
+  } else {
+    res.json(user);
+  }
+});
+//5
+app.put("/users/:name", (req, res) => {
+  const requestedName = req.params.name.toLowerCase();
+  const userIndex = users.findIndex(
+    (u) => u.name.toLowerCase() === requestedName
+  );
+
+  if (userIndex === -1) {
+    return res.status(404).json({
+      status: "error",
+      message: "Data tidak ditemukan",
+    });
+  }
+
+  if (!req.body) {
+    return res.status(400).json({
+      status: "error",
+      message: "Masukkan data yang akan diubah",
+    });
+  }
+  users[userIndex] = { ...users[userIndex], ...req.body };
+  res.status(200).json({
+    status: "success",
+    message: "Data berhasil diupdate",
+    data: users[userIndex],
+  });
+});
+//6
+app.delete('/users/:name', (req, res) => {
+    const requestedName = req.params.name.toLowerCase();
+    const userIndex = users.findIndex(u => u.name.toLowerCase() === requestedName);
+
+    if (userIndex === -1) {
+        return res.status(404).json({
+            status: 'error',
+            message: 'Data tidak ditemukan'
+        });
     }
-})
+    users.splice(userIndex, 1);
+    res.status(200).json({
+        status: 'success',
+        message: 'Data berhasil dihapus'
+    });
+});
 
-app.listen(port, () => console.log(`Server running at http://localhost:${port}`));
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({
+    status: "error",
+    message: "Terjadi kesalahan pada server",
+  });
+});
+app.use((req, res) => {
+    res.status(404).json({
+      status: "error",
+      message: "Resource tidak Ditemukan",
+    });
+  });
+app.listen(port, () =>
+  console.log(`Server running at http://localhost:${port}`)
+);

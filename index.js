@@ -34,6 +34,7 @@ app.post("/users", (req, res) => {
   res.status(201).json({
     status: "success",
     message: "Record baru berhasil ditambahkan",
+    id:users.length + 1,
     data: newUser,
   });
 });
@@ -63,14 +64,12 @@ app.put("/users/:name", (req, res) => {
   const userIndex = users.findIndex(
     (u) => u.name.toLowerCase() === requestedName
   );
-
   if (userIndex === -1) {
     return res.status(404).json({
       status: "error",
       message: "Data tidak ditemukan",
     });
   }
-
   if (!req.body) {
     return res.status(400).json({
       status: "error",

@@ -1,11 +1,11 @@
 const express = require("express");
 const app = express();
-const port = 3000;
+const port = 3200;
 const db = require("../db");
 
 app.use(express.json());
 
-const studentController = require("./Student/student.controllers");
+const studentController = require("./student/student.controllers");
 
 app.use("/students", studentController);
 
